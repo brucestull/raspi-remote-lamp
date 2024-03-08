@@ -1,4 +1,4 @@
-# raspi-4-flask-pin-17
+# Raspberry Pi 4 - Flask - Pin 17
 
 Flask app to control GPIO pin 17 from remote web browser.
 
@@ -68,7 +68,7 @@ Remember, controlling GPIO pins remotely over HTTP can have security implication
 
 ## Client
 
-[Python Script HTTP Request - ChatGPT](https://chat.openai.com/share/0eb8c54c-4ffd-4ffa-9c27-a6a38cd2a5380
+[Python Script HTTP Request - ChatGPT](https://chat.openai.com/share/0eb8c54c-4ffd-4ffa-9c27-a6a38cd2a538)
 
 Help me write a python script to send an http request to `192.168.1.181/gpio/off`?
 
