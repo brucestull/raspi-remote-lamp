@@ -2,9 +2,9 @@
 
 Flask app to control GPIO pin 17 from remote web browser.
 
-[Remote GPIO Control with Flask - ChatGPT](https://chat.openai.com/share/dc7c5899-53cf-4450-bf2e-5d31dfa1d37c)
+## Server
 
-## Request
+[Remote GPIO Control with Flask - ChatGPT](https://chat.openai.com/share/dc7c5899-53cf-4450-bf2e-5d31dfa1d37c)
 
 I have a raspberry Pi 4 B running raspberry pi OS. It has the GPIO header installed. How can I have a computer on my local network send an http request to the raspberry pi to turn on GPIO pin 17?
 
@@ -65,3 +65,35 @@ To control GPIO pins on your Raspberry Pi 4 using HTTP requests, you can set up 
 Make sure your Raspberry Pi and the computer sending requests are on the same local network. Additionally, ensure that your Raspberry Pi's firewall or any network-level restrictions allow incoming HTTP traffic on port 80.
 
 Remember, controlling GPIO pins remotely over HTTP can have security implications, so ensure proper authentication and authorization mechanisms if deploying in a production environment.
+
+## Client
+
+[Python Script HTTP Request - ChatGPT](https://chat.openai.com/share/0eb8c54c-4ffd-4ffa-9c27-a6a38cd2a5380
+
+Help me write a python script to send an http request to `192.168.1.181/gpio/off`?
+
+### Response
+
+
+Certainly! You can use the `requests` library in Python to send HTTP requests. Here's a simple script to send a GET request to `192.168.1.181/gpio/off`:
+
+```python
+import requests
+
+def send_http_request():
+    url = 'http://192.168.1.181/gpio/off'
+    
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            print("HTTP request sent successfully.")
+        else:
+            print(f"Failed to send HTTP request. Status code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    send_http_request()
+```
+
+Make sure you have the `requests` library installed in your 
