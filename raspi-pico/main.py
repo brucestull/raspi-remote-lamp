@@ -34,8 +34,6 @@ config = load_config("config.json")
 ssid = config["ssid"]
 password = config["password"]
 print("Loaded WiFi Settings!")
-pico_led_fast_blink(10)
-sleep(0.25)
 
 
 url_on = 'http://192.168.4.1:8000/gpio/on'
@@ -51,6 +49,7 @@ while not wlan.isconnected():
     pass
 
 print("Connected to WiFi!")
+pico_led_fast_blink(10)
 
 
 def handle_pin_change(pin):
