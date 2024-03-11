@@ -17,6 +17,27 @@ restart_button = Pin(16, Pin.IN, Pin.PULL_UP)
 restart_status_led = Pin(17, Pin.OUT)
 
 
+# Function to fast-blink `pico_led`:
+def led_fast_blink(led, cycles):
+    for _ in range(cycles):
+        led.on()
+        sleep(0.1)
+        led.off()
+        sleep(0.1)
+
+
+# Define a callback function to reset the Pico:
+def restart_pico(pin):
+    print("We're trying to restart this thing...")
+    led_fast_blink(restart_status_led, 4)
+    sleep(0.5)
+    reset()
+
+
+# Attach interrupt to Restart pin:
+restart_button.irq(trigger=Pin.IRQ_FALLING, handler=restart_pico)
+
+
 # Function to load WiFi credentials from `config.json`:
 def load_config(file_path):
     """
@@ -25,15 +46,6 @@ def load_config(file_path):
     with open(file_path, "r") as f:
         config = json.load(f)
     return config
-
-
-# Function to fast-blink `pico_led`:
-def led_fast_blink(led, cycles):
-    for _ in range(cycles):
-        led.on()
-        sleep(0.1)
-        led.off()
-        sleep(0.1)
 
 
 # Get the configuration settings from the config.json file:
@@ -76,15 +88,5 @@ def send_request(pin):
         pico_led.off()
 
 
-# Define a callback function to reset the Pico:
-def restart_pico(pin):
-    print("We're trying to restart this thing...")
-    led_fast_blink(restart_status_led, 4)
-    sleep(0.5)
-    reset()
-
-
 # Attach interrupt to Request-send pin:
 request_switch.irq(trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING, handler=send_request)
-# Attach interrupt to Restart pin:
-restart_button.irq(trigger=Pin.IRQ_FALLING, handler=restart_pico)
