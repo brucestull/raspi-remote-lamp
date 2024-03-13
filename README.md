@@ -22,3 +22,13 @@ Flask app to control GPIO pin 17 from remote web browser.
 - `curl http://192.168.1.91:8000/gpio/`
 - `curl http://192.168.1.91:8000/gpio/on`
 - `curl http://192.168.1.91:8000/gpio/off`
+
+## Setup
+
+### Raspberry Pi - Running Raspberry Pi OS
+
+1. `sudo apt-get update && sudo apt-get upgrade -y`
+1. `sudo apt-get install git`
+1. `sudo apt-get install pipenv`
+1. `git clone <REPOSITORY_URL>`
+1. `cd <REPOSITORY_DIRECTORY>`
