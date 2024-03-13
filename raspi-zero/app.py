@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, jsonify
-from .hardware_control import HardwareControl
+from hardware_control import HardwareControl
 
 # Create a Flask app
 app = Flask(__name__)
