@@ -32,3 +32,4 @@ Flask app to control GPIO pin 17 from remote web browser.
 1. `sudo apt-get install pipenv`
 1. `git clone <REPOSITORY_URL>`
 1. `cd <REPOSITORY_DIRECTORY>`
+1. `pipenv install`
