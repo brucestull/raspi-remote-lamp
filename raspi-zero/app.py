@@ -1,14 +1,20 @@
 from flask import Flask, redirect, url_for, jsonify
-import RPi.GPIO as GPIO
+from raspi_zero.hardware_control import HardwareControl
 
+# Create a Flask app
 app = Flask(__name__)
+
+# Create an instance of HardwareControl
+hardware_control = HardwareControl()
 
 # BCM pin number for the lamp control:
 lamp_control_pin = 17
 
-# Set up GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(lamp_control_pin, GPIO.OUT, initial=GPIO.LOW)
+# Set up hardware_control
+hardware_control.setmode(hardware_control.BCM)
+hardware_control.setup(
+    lamp_control_pin, hardware_control.OUT, initial=hardware_control.LOW
+)
 
 home_link = "<a href='/gpio/'>Home</a>"
 
@@ -29,7 +35,7 @@ def home():
 
 @app.route("/lamp-status/")
 def lamp_status():
-    lamp_pin_status_bin = GPIO.input(lamp_control_pin)
+    lamp_pin_status_bin = hardware_control.get_lamp_status()
     if lamp_pin_status_bin == 0:
         lamp_pin_status_str = "OFF"
     elif lamp_pin_status_bin == 1:
@@ -47,13 +53,13 @@ def gpio_home():
 
 @app.route("/gpio/on")
 def gpio_on():
-    GPIO.output(lamp_control_pin, GPIO.HIGH)
+    hardware_control.turn_on_lamp()
     return f"{home_link} <br> GPIO 17 turned on {form}"
 
 
 @app.route("/gpio/off")
 def gpio_off():
-    GPIO.output(lamp_control_pin, GPIO.LOW)
+    hardware_control.turn_off_lamp()
     return f"{home_link} <br> GPIO 17 turned off {form}"
 
 

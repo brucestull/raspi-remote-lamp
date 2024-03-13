@@ -14,16 +14,18 @@ def test_gpio_home(client):
     assert "Pin 17 Up" in response.data.decode()
 
 
-@patch("app.GPIO.input", return_value=0)
-def test_lamp_status_off(mock_gpio_input, client):
+@patch(
+    "raspi_zero.hardware_control.HardwareControl.get_lamp_status", return_value="OFF"
+)
+def test_lamp_status_off(mock_get_lamp_status, client):
     response = client.get("/lamp-status/")
     assert response.status_code == 200
     data = json.loads(response.data)
     assert data["lamp_pin_status"] == "OFF"
 
 
-@patch("app.GPIO.input", return_value=1)
-def test_lamp_status_on(mock_gpio_input, client):
+@patch("raspi_zero.hardware_control.HardwareControl.get_lamp_status", return_value="ON")
+def test_lamp_status_on(mock_get_lamp_status, client):
     response = client.get("/lamp-status/")
     assert response.status_code == 200
     data = json.loads(response.data)
