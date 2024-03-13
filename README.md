@@ -35,6 +35,9 @@ Flask app to control GPIO pin 17 from remote web browser.
 1. `ssh-add ~/.ssh/id_ed25519`
 1. `cat ~/.ssh/id_ed25519*`
 1. [https://github.com/settings/keys](https://github.com/settings/keys)
+1. `ssh -T git@github.com`
+1. `git config --global user.email "name@email.app"`
+1. `git config --global user.name "Name"`
 1. `git clone <REPOSITORY_URL>`
 1. `cd <REPOSITORY_DIRECTORY>`
 1. `pipenv install`
