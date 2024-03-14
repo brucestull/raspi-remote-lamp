@@ -7,23 +7,8 @@ from picozero import pico_led
 import utime
 
 
-# Setup pin 18 (Request-send pin) as input:
-request_switch = Pin(18, Pin.IN, Pin.PULL_DOWN)
-
 # Setup pin 16 (Reset pin) as input:
 restart_button = Pin(16, Pin.IN, Pin.PULL_UP)
-
-# Setup pin 17 as restart status LED:
-restart_status_led = Pin(17, Pin.OUT)
-
-
-# Function to fast-blink `pico_led`:
-def led_fast_blink(led, cycles):
-    for _ in range(cycles):
-        led.on()
-        sleep(0.1)
-        led.off()
-        sleep(0.1)
 
 
 # Define a callback function to reset the Pico:
@@ -37,6 +22,12 @@ def restart_pico(pin):
 # Attach interrupt to Restart pin:
 restart_button.irq(trigger=Pin.IRQ_FALLING, handler=restart_pico)
 
+# Setup pin 18 (Request-send pin) as input:
+request_switch = Pin(18, Pin.IN, Pin.PULL_DOWN)
+
+# Setup pin 17 as restart status LED:
+restart_status_led = Pin(17, Pin.OUT)
+
 
 # Function to load WiFi credentials from `config.json`:
 def load_config(file_path):
@@ -48,6 +39,15 @@ def load_config(file_path):
     return config
 
 
+# Function to fast-blink `pico_led`:
+def led_fast_blink(led, cycles):
+    for _ in range(cycles):
+        led.on()
+        sleep(0.1)
+        led.off()
+        sleep(0.1)
+
+
 # Get the configuration settings from the config.json file:
 config = load_config("config.json")
 # Set the ssid and password from the configuration settings:
@@ -55,9 +55,12 @@ ssid = config["ssid"]
 password = config["password"]
 print("Loaded WiFi Settings!")
 
+# Get the lamp host from the configuration settings:
+lamp_host = config["lamp_host"]
 
-url_on = "http://192.168.4.1:8000/gpio/on"
-url_off = "http://192.168.4.1:8000/gpio/off"
+# Define the URLs for the lamp control:
+url_on = f"{lamp_host}/gpio/on"
+url_off = f"{lamp_host}/gpio/off"
 
 # Setup WiFi connection
 wlan = network.WLAN(network.STA_IF)
