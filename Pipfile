@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 flask = "*"
+"rpi.gpio" = "*"
+pytest = "*"
+pytest-flask = "*"
 
 [dev-packages]
 
