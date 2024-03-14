@@ -79,12 +79,12 @@ led_fast_blink(pico_led, 10)
 def send_request(pin):
     if pin.value() == 1:
         # Pin went high, turn on the LED
-        print("Sending request to turn on LED")
+        print(f"Sending request to turn on LED: {url_on}")
         urequests.get(url_on).close()
         led_fast_blink(pico_led, 5)
     else:
         # Pin went low, turn off the LED
-        print("Sending request to turn off LED")
+        print(f"Sending request to turn off LED: {url_off}")
         urequests.get(url_off).close()
         pico_led.on()
         sleep(1)
