@@ -1,9 +1,8 @@
 import json
 from unittest.mock import patch
 
-
 import pytest
-from unittest.mock import patch
+
 from hardware_control import HardwareControl
 
 

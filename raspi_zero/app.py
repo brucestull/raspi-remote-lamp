@@ -1,7 +1,7 @@
-from flask import Flask, redirect, url_for, jsonify
 import RPi.GPIO as GPIO
-from hardware_control import HardwareControl
+from flask import Flask, jsonify, redirect, url_for
 
+from hardware_control import HardwareControl
 
 app = Flask(__name__)
 
