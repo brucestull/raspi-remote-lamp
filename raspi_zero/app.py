@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, jsonify
 import RPi.GPIO as GPIO
 from hardware_control import HardwareControl
 
+
 app = Flask(__name__)
 
 # BCM pin number for the lamp control:

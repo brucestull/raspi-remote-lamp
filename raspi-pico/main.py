@@ -1,14 +1,13 @@
 import network
 import urequests
 import json
-from time import sleep, ticks_ms, ticks_diff
+from time import sleep
 from machine import Pin, reset
 from picozero import pico_led
-import utime
 
 
-# Setup pin 16 (Reset pin) as input:
-restart_button = Pin(16, Pin.IN, Pin.PULL_UP)
+# Setup pin 17 as restart status LED:
+restart_status_led = Pin(17, Pin.OUT)
 
 
 # Define a callback function to reset the Pico:
@@ -19,14 +18,14 @@ def restart_pico(pin):
     reset()
 
 
+# Setup pin 16 (Reset pin) as input:
+restart_button = Pin(16, Pin.IN, Pin.PULL_UP)
+
 # Attach interrupt to Restart pin:
 restart_button.irq(trigger=Pin.IRQ_FALLING, handler=restart_pico)
 
 # Setup pin 18 (Request-send pin) as input:
 request_switch = Pin(18, Pin.IN, Pin.PULL_DOWN)
-
-# Setup pin 17 as restart status LED:
-restart_status_led = Pin(17, Pin.OUT)
 
 
 # Function to load WiFi credentials from `config.json`:
