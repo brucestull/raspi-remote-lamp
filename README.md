@@ -2,6 +2,18 @@
 
 Flask app to control GPIO pin 17 from remote web browser.
 
+## Commits
+
+### [Commit bed677eb3e56576d0e2b8cdad42fda427d910dba](https://github.com/brucestull/raspi-zero-lamp-server/tree/bed677eb3e56576d0e2b8cdad42fda427d910dba)
+
+- Raspberry Pi Zero connects to local WiFi
+- Raspberry Pi Pico connects to loacl WiFi
+- Functional endpoints
+    - `/gpio/`
+    - `/gpio/lamp-status/`
+    - `/gpio/on`
+    - `/gpio/off`
+
 ## Links
 
 - [http://192.168.4.1:8000/gpio/](http://192.168.4.1:8000/gpio/)
