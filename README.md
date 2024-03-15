@@ -1,10 +1,10 @@
-# Remote GPIO Control with Flask (pin 17)
+# Remote Controlled Lamp with Raspberry Pi Zero W and Raspberry Pi Pico
 
-Flask app to control GPIO pin 17 from remote web browser.
+Flask app to control a lamp with a Raspberry Pi Zero W and a Raspberry Pi Pico.
 
-## Commits
+## Branches
 
-### [Commit bed677eb3e56576d0e2b8cdad42fda427d910dba](https://github.com/brucestull/raspi-zero-lamp-server/tree/bed677eb3e56576d0e2b8cdad42fda427d910dba)
+### [Branch functions-on-local-wifi](https://github.com/brucestull/raspi-zero-lamp-server/tree/functions-on-local-wifi)
 
 - Raspberry Pi Zero connects to local WiFi
 - Raspberry Pi Pico connects to local WiFi
