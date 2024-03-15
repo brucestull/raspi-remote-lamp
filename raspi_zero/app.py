@@ -1,7 +1,6 @@
 # raspi_zero\app.py
 
 from flask import Flask, jsonify, redirect, url_for
-
 from hardware_control import HardwareControl
 
 app = Flask(__name__)
