@@ -1,24 +1,27 @@
 # tests/test_hardware_control.py
 
-from unittest.mock import patch
 import unittest
+from unittest.mock import patch
+import sys
 
-# You may need to adjust the import path based on your project structure
-from hardware_control import HardwareControl
-from mocks.mock_gpio import (
-    MockGPIO,
-)  # Adjust the import path based on your actual file location
+# Import the mock module directly, and patch sys.modules to replace RPi.GPIO with MockGPIO
+from mocks.mock_gpio import MockGPIO
 
 
 class TestHardwareControl(unittest.TestCase):
+    def setUp(self):
+        # Patch sys.modules to replace RPi.GPIO with MockGPIO before any import happens
+        sys.modules["RPi.GPIO"] = MockGPIO()
 
-    @patch("raspi_zero.hardware_control.GPIO", new=MockGPIO())
+        # Now that RPi.GPIO is mocked, you can safely import your module
+        global HardwareControl
+        from hardware_control import HardwareControl
+
     def test_turn_lamp_on(self):
         hardware = HardwareControl(17)
         hardware.turn_lamp_on()
         self.assertEqual(hardware.get_lamp_pin_status(), "ON")
 
-    @patch("raspi_zero.hardware_control.GPIO", new=MockGPIO())
     def test_turn_lamp_off(self):
         hardware = HardwareControl(17)
         hardware.turn_lamp_off()
