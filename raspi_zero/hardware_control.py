@@ -1,3 +1,5 @@
+# raspi_zero\hardware_control.py
+
 import RPi.GPIO as GPIO
 
 
