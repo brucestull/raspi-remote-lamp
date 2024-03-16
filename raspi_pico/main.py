@@ -1,10 +1,10 @@
-import network
-import urequests
 import json
 from time import sleep
+
+import network
+import urequests
 from machine import Pin, reset
 from picozero import pico_led
-
 
 # Setup pin 17 as restart status LED:
 restart_status_led = Pin(17, Pin.OUT)

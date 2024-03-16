@@ -1,5 +1,6 @@
-from utils import send_request
 from time import sleep
+
+from utils import send_request
 
 HOST = "192.168.1.91"
 PORT = 8000

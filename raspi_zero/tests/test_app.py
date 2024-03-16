@@ -1,10 +1,11 @@
-import pytest
-from flask import url_for
 from unittest.mock import patch
+
+import pytest
+from app import app as flask_app
+from flask import url_for
 
 # Importing Flask application under test
 from raspi_zero.app import app as flask_app
-from app import app as flask_app
 
 
 @pytest.fixture
