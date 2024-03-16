@@ -49,6 +49,7 @@ def led_fast_blink(led, cycles):
         led.off()
         sleep(0.1)
 
+
 # Blink LED to indicate startup:
 led_fast_blink(restart_status_led, 4)
 
@@ -82,17 +83,17 @@ led_fast_blink(wifi_status_led, 10)
 # Define a callback function to send the request:
 def send_request(pin):
     if pin.value() == 0:
-        # Pin went high, turn on the LED
+        # Pin went low, turn on the LED
         print(f"Sending request to turn on LED: {url_on}")
         urequests.get(url_on).close()
-        led_fast_blink(pico_led, 5)
+        led_fast_blink(lamp_on, 5)
     else:
-        # Pin went low, turn off the LED
+        # Pin went high, turn off the LED
         print(f"Sending request to turn off LED: {url_off}")
         urequests.get(url_off).close()
-        pico_led.on()
+        lamp_off.on()
         sleep(1)
-        pico_led.off()
+        lamp_off.off()
 
 
 # Attach interrupt to Request-send pin:
