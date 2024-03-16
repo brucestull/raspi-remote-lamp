@@ -6,8 +6,11 @@ import urequests
 from machine import Pin, reset
 from picozero import pico_led
 
-# Setup pin 17 as restart status LED:
+# Setup LED pins:
 restart_status_led = Pin(16, Pin.OUT)
+wifi_status_led = Pin(17, Pin.OUT)
+lamp_on = Pin(18, Pin.OUT)
+lamp_off = Pin(19, Pin.OUT)
 
 
 # Define a callback function to reset the Pico:
@@ -46,6 +49,8 @@ def led_fast_blink(led, cycles):
         led.off()
         sleep(0.1)
 
+# Blink LED to indicate startup:
+led_fast_blink(restart_status_led, 4)
 
 # Get the configuration settings from the config.json file:
 config = load_config("config.json")
@@ -71,7 +76,7 @@ while not wlan.isconnected():
     pass
 
 print("Connected to WiFi!")
-led_fast_blink(pico_led, 10)
+led_fast_blink(wifi_status_led, 10)
 
 
 # Define a callback function to send the request:
