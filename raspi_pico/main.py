@@ -7,7 +7,7 @@ from machine import Pin, reset
 from picozero import pico_led
 
 # Setup pin 17 as restart status LED:
-restart_status_led = Pin(17, Pin.OUT)
+restart_status_led = Pin(16, Pin.OUT)
 
 
 # Define a callback function to reset the Pico:
@@ -19,13 +19,13 @@ def restart_pico(pin):
 
 
 # Setup pin 16 (Reset pin) as input:
-restart_button = Pin(16, Pin.IN, Pin.PULL_UP)
+restart_button = Pin(15, Pin.IN, Pin.PULL_UP)
 
 # Attach interrupt to Restart pin:
 restart_button.irq(trigger=Pin.IRQ_FALLING, handler=restart_pico)
 
 # Setup pin 18 (Request-send pin) as input:
-request_switch = Pin(18, Pin.IN, Pin.PULL_DOWN)
+request_switch = Pin(14, Pin.IN, Pin.PULL_UP)
 
 
 # Function to load WiFi credentials from `config.json`:
@@ -76,7 +76,7 @@ led_fast_blink(pico_led, 10)
 
 # Define a callback function to send the request:
 def send_request(pin):
-    if pin.value() == 1:
+    if pin.value() == 0:
         # Pin went high, turn on the LED
         print(f"Sending request to turn on LED: {url_on}")
         urequests.get(url_on).close()
