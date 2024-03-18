@@ -1,3 +1,5 @@
+# raspi_pico\main.py
+
 import json
 from time import sleep
 
@@ -6,29 +8,114 @@ import urequests
 from machine import Pin, reset
 from picozero import pico_led
 
-# Setup pin 17 as restart status LED:
-restart_status_led = Pin(17, Pin.OUT)
+# Setup LED pins:
+restart_status_led = Pin(16, Pin.OUT)
+wifi_status_led = Pin(17, Pin.OUT)
+lamp_on = Pin(18, Pin.OUT)
+lamp_off = Pin(19, Pin.OUT)
+lamp_status = Pin(13, Pin.OUT)
+
+
+# Setup input pins:
+restart_button = Pin(15, Pin.IN, Pin.PULL_UP)
+request_switch = Pin(14, Pin.IN, Pin.PULL_UP)
+
+
+# Function to blink `led`:
+def led_blink(led, cycles=2, time_diff=0.1):
+    """
+    Blink the LED `led` for `cycles` times with a time difference of `time_diff` seconds.
+
+    Args:
+    led (machine.Pin): The LED pin to blink.
+    cycles (int): The number of times to blink the LED.
+    time_diff (float): The time difference between LED on and off states.
+    """
+    for _ in range(cycles):
+        led.on()
+        sleep(time_diff)
+        led.off()
+        sleep(time_diff)
 
 
 # Define a callback function to reset the Pico:
-def restart_pico(pin):
+def restart_pico(led_blink_function, led, cycles=4, time_diff=0.1):
+    """
+    Restart the Pico when the restart button is pressed.
+    This version allows passing a custom `led_blink_function` and its parameters.
+
+    Args:
+    led_blink_function (function): The function to blink an LED.
+    led (Pin): The LED pin to blink.
+    cycles (int): The number of times to blink the LED (default is 4).
+    time_diff (float): The time difference between LED on and off states (default is 0.1 seconds).
+    """
     print("We're trying to restart this thing...")
-    led_fast_blink(restart_status_led, 4)
+    led_blink_function(led, cycles, time_diff)
     sleep(0.5)
     reset()
 
 
-# Setup pin 16 (Reset pin) as input:
-restart_button = Pin(16, Pin.IN, Pin.PULL_UP)
+# Define a callback function to send the request:
+def send_request(pin, off_route, on_route, off_pin, on_pin):
+    """
+    Function to send a request to the lamp server when the request switch is toggled.
 
-# Attach interrupt to Restart pin:
-restart_button.irq(trigger=Pin.IRQ_FALLING, handler=restart_pico)
+    Args:
+    pin (machine.Pin): The pin that triggered the interrupt.
+    off_route (str): The route to the flask app to turn off the lamp.
+    on_route (str): The route to the flask app to turn on the lamp.
+    """
+    if pin.value() == 0:
+        # Pin went low, turn on the LED
+        print(f"Sending request to turn on LED: {url_on}")
+        urequests.get(on_route).close()
+        led_blink(on_pin, 5)
+    else:
+        # Pin went high, turn off the LED
+        print(f"Sending request to turn off LED: {url_off}")
+        urequests.get(off_route).close()
+        led_blink(off_pin, 2, 0.3)
 
-# Setup pin 18 (Request-send pin) as input:
-request_switch = Pin(18, Pin.IN, Pin.PULL_DOWN)
+
+def set_remote_lamp_status_to_switch(
+    pin, led_function, off_route, on_route, off_pin, on_pin
+):
+    """
+    Send initial request to the lamp server to set it to current switch status.
+
+    Args:
+    pin (machine.Pin): The pin that determines the current needed status of the lamp.
+    led_function (function): The function to blink an LED.
+    off_route (str): The route to the flask app to turn off the lamp.
+    on_route (str): The route to the flask app to turn on the lamp.
+    off_pin (machine.Pin): The pin to display the off status of the lamp.
+    on_pin (machine.Pin): The pin to display the on status of the lamp.
+    """
+    if pin.value() == 0:
+        # Pin is low, turn on the LED
+        print(f"Sending request to turn on LED: {on_route}")
+        urequests.get(on_route).close()
+        led_function(on_pin, 5)
+    else:
+        # Pin is high, turn off the LED
+        print(f"Sending request to turn off LED: {off_route}")
+        urequests.get(off_route).close()
+        led_function(off_pin, 5)
 
 
-# Function to load WiFi credentials from `config.json`:
+# Attach interrupt to Restart button pin:
+restart_button.irq(
+    trigger=Pin.IRQ_FALLING,
+    handler=lambda pin: restart_pico(led_blink, restart_status_led, 6),
+)
+
+
+# Blink LED to indicate startup:
+led_blink(restart_status_led, 3)
+
+
+# Function to load WiFi credentials from `file_path`:
 def load_config(file_path):
     """
     Load a JSON configuration file and return it as a dictionary.
@@ -38,16 +125,7 @@ def load_config(file_path):
     return config
 
 
-# Function to fast-blink `pico_led`:
-def led_fast_blink(led, cycles):
-    for _ in range(cycles):
-        led.on()
-        sleep(0.1)
-        led.off()
-        sleep(0.1)
-
-
-# Get the configuration settings from the config.json file:
+# Get the configuration settings from the `config.json` file:
 config = load_config("config.json")
 # Set the ssid and password from the configuration settings:
 ssid = config["ssid"]
@@ -71,24 +149,17 @@ while not wlan.isconnected():
     pass
 
 print("Connected to WiFi!")
-led_fast_blink(pico_led, 10)
+led_blink(wifi_status_led, 10)
 
 
-# Define a callback function to send the request:
-def send_request(pin):
-    if pin.value() == 1:
-        # Pin went high, turn on the LED
-        print(f"Sending request to turn on LED: {url_on}")
-        urequests.get(url_on).close()
-        led_fast_blink(pico_led, 5)
-    else:
-        # Pin went low, turn off the LED
-        print(f"Sending request to turn off LED: {url_off}")
-        urequests.get(url_off).close()
-        pico_led.on()
-        sleep(1)
-        pico_led.off()
+# Set the initial status of the lamp:
+set_remote_lamp_status_to_switch(
+    request_switch, led_blink, url_off, url_on, lamp_off, lamp_on
+)
 
 
 # Attach interrupt to Request-send pin:
-request_switch.irq(trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING, handler=send_request)
+request_switch.irq(
+    trigger=Pin.IRQ_RISING | Pin.IRQ_FALLING,
+    handler=lambda pin: send_request(pin, url_off, url_on, lamp_off, lamp_on),
+)

@@ -10,16 +10,16 @@ LED_OFF_PATH = "/gpio/off"
 
 
 def main():
-    sleep(2)
+    sleep(3)
     print("Sending request to turn LED on...")
     send_request(ROOT_URL, LED_ON_PATH)
-    sleep(2)
+    sleep(3)
     print("Sending request to turn LED off...")
     send_request(ROOT_URL, LED_OFF_PATH)
-    sleep(2)
+    sleep(3)
     print("Sending request to turn LED on...")
     send_request(ROOT_URL, LED_ON_PATH)
-    sleep(2)
+    sleep(3)
     print("Sending request to turn LED off...")
     send_request(ROOT_URL, LED_OFF_PATH)
 
