@@ -9,11 +9,11 @@ from machine import Pin, reset
 from picozero import pico_led
 
 # Setup LED pins:
-restart_status_led = Pin(16, Pin.OUT)
-wifi_status_led = Pin(17, Pin.OUT)
+startup_led = Pin(20, Pin.OUT)
+wifi_status_led = Pin(19, Pin.OUT)
 lamp_on = Pin(18, Pin.OUT)
-lamp_off = Pin(19, Pin.OUT)
-lamp_status = Pin(13, Pin.OUT)
+lamp_off = Pin(17, Pin.OUT)
+shutdown_led = Pin(16, Pin.OUT)
 
 
 # Setup input pins:
@@ -78,7 +78,7 @@ def send_request(pin, off_route, on_route, off_pin, on_pin):
         led_blink(off_pin, 2, 0.3)
 
 
-def set_remote_lamp_status_to_switch(
+def set_remote_lamp_to_switch_status(
     pin, led_function, off_route, on_route, off_pin, on_pin
 ):
     """
@@ -93,26 +93,30 @@ def set_remote_lamp_status_to_switch(
     on_pin (machine.Pin): The pin to display the on status of the lamp.
     """
     if pin.value() == 0:
-        # Pin is low, turn on the LED
-        print(f"Sending request to turn on LED: {on_route}")
+        # Pin is low, turn on the Lamp
+        print("Pin is low, turning on the Lamp...")
+        print(f"Sending request to turn on Lamp: {on_route}")
         urequests.get(on_route).close()
         led_function(on_pin, 5)
+        return "Lamp should be ON!"
     else:
-        # Pin is high, turn off the LED
-        print(f"Sending request to turn off LED: {off_route}")
+        # Pin is high, turn off the Lamp
+        print("Pin is high, turning off the Lamp...")
+        print(f"Sending request to turn off Lamp: {off_route}")
         urequests.get(off_route).close()
         led_function(off_pin, 5)
+        return "Lamp should be OFF!"
 
 
 # Attach interrupt to Restart button pin:
 restart_button.irq(
     trigger=Pin.IRQ_FALLING,
-    handler=lambda pin: restart_pico(led_blink, restart_status_led, 6),
+    handler=lambda pin: restart_pico(led_blink, shutdown_led, 6),
 )
 
 
 # Blink LED to indicate startup:
-led_blink(restart_status_led, 3)
+led_blink(startup_led, 3)
 
 
 # Function to load WiFi credentials from `file_path`:
@@ -150,12 +154,16 @@ while not wlan.isconnected():
 
 print("Connected to WiFi!")
 led_blink(wifi_status_led, 10)
+# Turn on `wifi_status_led` to indicate successful connection to WiFi:
+wifi_status_led.on()
 
 
-# Set the initial status of the lamp:
-set_remote_lamp_status_to_switch(
+# Set remote lamp to the current switch status and print the status:
+lamp_switch_status = set_remote_lamp_to_switch_status(
     request_switch, led_blink, url_off, url_on, lamp_off, lamp_on
 )
+# Print the current Lamp switch status:
+print(lamp_switch_status)
 
 
 # Attach interrupt to Request-send pin:
