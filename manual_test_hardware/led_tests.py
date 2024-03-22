@@ -7,10 +7,12 @@ from picozero import pico_led
 
 status = pico_led
 
-boot = Pin(16, Pin.OUT)
-wifi = Pin(17, Pin.OUT)
-led_on = Pin(18, Pin.OUT)
-led_off = Pin(19, Pin.OUT)
+# Setup LED pins:
+startup_led = Pin(20, Pin.OUT)
+wifi_status_led = Pin(19, Pin.OUT)
+lamp_on = Pin(18, Pin.OUT)
+lamp_off = Pin(17, Pin.OUT)
+shutdown_led = Pin(16, Pin.OUT)
 
 
 def pin_cycle(pin, time_diff, cycles):
@@ -21,8 +23,14 @@ def pin_cycle(pin, time_diff, cycles):
         sleep(time_diff)
 
 
-pin_cycle(status, 0.1, 2)
-pin_cycle(boot, 0.1, 4)
-pin_cycle(wifi, 0.1, 4)
-pin_cycle(led_on, 0.1, 4)
-pin_cycle(led_off, 0.1, 4)
+def test_leds():
+    pin_cycle(status, 0.1, 4)
+    pin_cycle(startup_led, 0.1, 4)
+    pin_cycle(wifi_status_led, 0.1, 4)
+    pin_cycle(lamp_on, 0.1, 4)
+    pin_cycle(lamp_off, 0.1, 4)
+    pin_cycle(shutdown_led, 0.1, 4)
+
+
+if __name__ == "__main__":
+    test_leds()

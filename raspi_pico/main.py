@@ -18,7 +18,7 @@ shutdown_led = Pin(16, Pin.OUT)
 
 # Setup input pins:
 restart_button = Pin(15, Pin.IN, Pin.PULL_UP)
-request_switch = Pin(14, Pin.IN, Pin.PULL_UP)
+request_switch = Pin(14, Pin.IN, Pin.PULL_DOWN)
 
 
 # Function to blink `led`:
@@ -57,7 +57,7 @@ def restart_pico(led_blink_function, led, cycles=4, time_diff=0.1):
 
 
 # Define a callback function to send the request:
-def send_request(pin, off_route, on_route, off_pin, on_pin):
+def send_request(switch_pin, off_route, on_route, off_led_pin, on_led_pin):
     """
     Function to send a request to the lamp server when the request switch is toggled.
 
@@ -65,17 +65,19 @@ def send_request(pin, off_route, on_route, off_pin, on_pin):
     pin (machine.Pin): The pin that triggered the interrupt.
     off_route (str): The route to the flask app to turn off the lamp.
     on_route (str): The route to the flask app to turn on the lamp.
+    off_led_pin (machine.Pin): The pin to display the off status of the lamp.
+    on_led_pin (machine.Pin): The pin to display the on status of the lamp.
     """
-    if pin.value() == 0:
+    if switch_pin.value() == 1:
         # Pin went low, turn on the LED
         print(f"Sending request to turn on LED: {url_on}")
         urequests.get(on_route).close()
-        led_blink(on_pin, 5)
+        led_blink(on_led_pin, 5)
     else:
         # Pin went high, turn off the LED
         print(f"Sending request to turn off LED: {url_off}")
         urequests.get(off_route).close()
-        led_blink(off_pin, 2, 0.3)
+        led_blink(off_led_pin, 2, 0.3)
 
 
 def set_remote_lamp_to_switch_status(
@@ -92,7 +94,7 @@ def set_remote_lamp_to_switch_status(
     off_pin (machine.Pin): The pin to display the off status of the lamp.
     on_pin (machine.Pin): The pin to display the on status of the lamp.
     """
-    if pin.value() == 0:
+    if pin.value() == 1:
         # Pin is low, turn on the Lamp
         print("Pin is low, turning on the Lamp...")
         print(f"Sending request to turn on Lamp: {on_route}")
