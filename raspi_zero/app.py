@@ -51,5 +51,12 @@ def gpio_off():
     return f"{home_link} <br> {response} {form}"
 
 
+@app.route("/gpio/toggle")
+def gpio_toggle():
+    status = hardware.toggle_lamp()
+    print(status)
+    return redirect(url_for("gpio_home"))
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)

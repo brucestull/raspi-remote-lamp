@@ -50,3 +50,17 @@ class HardwareControl:
         """
         GPIO.output(self.lamp_control_pin, GPIO.LOW)
         return "Lamp turned off."
+
+    def toggle_lamp(self):
+        """
+        Toggle the lamp on or off.
+        """
+        lamp_pin_status_binary = GPIO.input(self.lamp_control_pin)
+        if lamp_pin_status_binary == 0:
+            GPIO.output(self.lamp_control_pin, GPIO.HIGH)
+            return "Lamp turned on."
+        elif lamp_pin_status_binary == 1:
+            GPIO.output(self.lamp_control_pin, GPIO.LOW)
+            return "Lamp turned off."
+        else:
+            return "Lamp status unknown."
