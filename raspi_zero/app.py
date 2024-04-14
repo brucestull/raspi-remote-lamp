@@ -9,7 +9,13 @@ lamp_control_pin = 24
 # Initialize the hardware control:
 hardware = HardwareControl(lamp_control_pin)
 
-home_link = "<a href='/gpio/'>Home</a>"
+lamp_status_url = "/lamp-status/"
+gpio_home_url = "/gpio/"
+gpio_on_url = "/gpio/on"
+gpio_off_url = "/gpio/off"
+gpio_toggle_url = "/gpio/toggle"
+
+home_link = f"<a href='{gpio_home_url}'>Home</a>"
 
 form = f"""
 	<form action="./toggle">
@@ -29,32 +35,32 @@ def home():
     return redirect(url_for("gpio_home"))
 
 
-@app.route("/lamp-status/")
+@app.route(lamp_status_url)
 def lamp_status():
     lamp_pin_status_str = hardware.get_lamp_pin_status()
     data = {"lamp_pin_status": lamp_pin_status_str}
     return jsonify(data)
 
 
-@app.route("/gpio/")
+@app.route(gpio_home_url)
 def gpio_home():
     lamp_pin_status_str = hardware.get_lamp_pin_status()
     return f"{home_link} <br> Lamp is: {lamp_pin_status_str} {form}"
 
 
-@app.route("/gpio/on")
+@app.route(gpio_on_url)
 def gpio_on():
     response = hardware.turn_lamp_on()
     return f"{home_link} <br> {response} {form}"
 
 
-@app.route("/gpio/off")
+@app.route(gpio_off_url)
 def gpio_off():
     response = hardware.turn_lamp_off()
     return f"{home_link} <br> {response} {form}"
 
 
-@app.route("/gpio/toggle")
+@app.route(gpio_toggle_url)
 def gpio_toggle():
     status = hardware.toggle_lamp()
     print(status)
