@@ -4,19 +4,22 @@ from hardware_control import HardwareControl
 app = Flask(__name__)
 
 # BCM pin number for the lamp control:
-lamp_control_pin = 17
+lamp_control_pin = 24
 
 # Initialize the hardware control:
 hardware = HardwareControl(lamp_control_pin)
 
 home_link = "<a href='/gpio/'>Home</a>"
 
-form = """
+form = f"""
+	<form action="./toggle">
+		<input type="submit" value="Toggle the Damned ({lamp_control_pin}) Lamp, please?" />
+	</form>
 	<form action="./on">
-		<input type="submit" value="Pin 17 Up" />
+		<input type="submit" value="Turn ({lamp_control_pin}) Lamp ON, maybe?" />
 	</form>
 	<form action="./off">
-		<input type="submit" value="Pin 17 Down" />
+		<input type="submit" value="Turn ({lamp_control_pin}) Lamp OFF, possibly?" />
 	</form>
 """
 
