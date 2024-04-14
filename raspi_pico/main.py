@@ -56,6 +56,7 @@ def restart_pico(led_blink_function, led, cycles=4, time_diff=0.1):
     reset()
 
 
+# TODO: Change this to toggle the lamp on or off when switch is toggled (changes state).
 # Define a callback function to send the request:
 def send_request(switch_pin, off_route, on_route, off_led_pin, on_led_pin):
     """
