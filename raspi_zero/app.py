@@ -17,17 +17,18 @@ gpio_toggle_url = "/gpio/toggle"
 
 home_link = f"<a href='{gpio_home_url}'>Home</a>"
 
-form = f"""
-	<form action="./toggle">
-		<input type="submit" value="Toggle the Damned ({lamp_control_pin}) Lamp, please?" />
-	</form>
-	<form action="./on">
-		<input type="submit" value="Turn ({lamp_control_pin}) Lamp ON, maybe?" />
-	</form>
-	<form action="./off">
-		<input type="submit" value="Turn ({lamp_control_pin}) Lamp OFF, possibly?" />
+def form_builder(url, text, pin=lamp_control_pin):
+	return f"""
+	<form action='{url}'>
+		<input type="submit" value="{text} Damned {pin}, please?" />
 	</form>
 """
+
+toggle_form = form_builder(gpio_toggle_url, "Toggle")
+on_form = form_builder(gpio_on_url, "Turn ON")
+off_form = form_builder(gpio_off_url, "Turn OFF")
+
+form = toggle_form + on_form + off_form
 
 
 @app.route("/")
