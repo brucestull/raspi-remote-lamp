@@ -1,5 +1,7 @@
 # On-Screen Keyboard Setup
 
+- [Open wvkbd Automatically RasPi - ChatGPT](https://chat.openai.com/share/21d2d863-2cfd-4fa5-9c35-32fc7e6cabdf)
+
 ```bash
 flynntknapp@LAMP-SERVER:~ $ wvkbd
 bash: wvkbd: command not found
