@@ -64,3 +64,6 @@ class HardwareControl:
             return "Lamp turned off."
         else:
             return "Lamp status unknown."
+
+    def __str__(self):
+        return f"Hardware Pin {self.lamp_control_pin}: Status {self.get_lamp_pin_status()}"
