@@ -6,7 +6,7 @@
 
 I have a flask app at `/path/to/flask.py`. The computer is linux ubuntu server.
 
-How do I starte `/path/to/flask.py` on system startup?
+How do I start `/path/to/flask.py` on system startup?
 
 ### Answer
 
