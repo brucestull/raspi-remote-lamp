@@ -20,7 +20,7 @@ home_link = f"<a href='{gpio_home_url}'>Home</a>"
 def form_builder(url, text, pin=lamp_control_pin):
 	return f"""
 	<form action='{url}'>
-		<input type="submit" value="{text} Damned {pin}, please?" />
+		<input type="submit" value="{text} pin {pin}, please?" />
 	</form>
 """
 
