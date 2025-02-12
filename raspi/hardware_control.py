@@ -6,64 +6,64 @@ class HardwareControl:
     A class to control the hardware of the Raspberry Pi Zero.
 
     Attributes:
-        lamp_control_pin (int): The BCM pin number for the lamp control.
+        control_pin (int): The BCM pin number for the pin control.
     """
 
-    def __init__(self, lamp_control_pin):
-        self.lamp_control_pin = lamp_control_pin
+    def __init__(self, control_pin):
+        self.control_pin = control_pin
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.lamp_control_pin, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(self.control_pin, GPIO.OUT, initial=GPIO.LOW)
 
-    def get_lamp_pin_status(self):
+    def get_pin_status(self):
         """
-        Get the status of the lamp pin.
+        Get the status of the pin.
 
         Returns:
-            str: The status of the lamp pin.
+            str: The status of the pin.
         """
-        lamp_pin_status_binary = GPIO.input(self.lamp_control_pin)
-        if lamp_pin_status_binary == 0:
+        pin_status_binary = GPIO.input(self.control_pin)
+        if pin_status_binary == 0:
             return "OFF"
-        elif lamp_pin_status_binary == 1:
+        elif pin_status_binary == 1:
             return "ON"
         else:
             return "UNKNOWN"
         # Alternate implementation:
-        # if lamp_pin_status_binary == 0:
-        #     lamp_pin_status_str = "OFF"
-        # elif lamp_pin_status_binary == 1:
-        #     lamp_pin_status_str = "ON"
+        # if pin_status_binary == 0:
+        #     pin_status_str = "OFF"
+        # elif pin_status_binary == 1:
+        #     pin_status_str = "ON"
         # else:
-        #     lamp_pin_status_str = "UNKNOWN"
-        # return lamp_pin_status_str
+        #     pin_status_str = "UNKNOWN"
+        # return pin_status_str
 
-    def turn_lamp_on(self):
+    def turn_pin_on(self):
         """
-        Turn the lamp on.
+        Turn the pin on.
         """
-        GPIO.output(self.lamp_control_pin, GPIO.HIGH)
-        return "Lamp turned on."
+        GPIO.output(self.control_pin, GPIO.HIGH)
+        return "Pin turned on."
 
-    def turn_lamp_off(self):
+    def turn_pin_off(self):
         """
-        Turn the lamp off.
+        Turn the pin off.
         """
-        GPIO.output(self.lamp_control_pin, GPIO.LOW)
-        return "Lamp turned off."
+        GPIO.output(self.control_pin, GPIO.LOW)
+        return "Pin turned off."
 
-    def toggle_lamp(self):
+    def toggle_pin(self):
         """
-        Toggle the lamp on or off.
+        Toggle the pin on or off.
         """
-        lamp_pin_status_binary = GPIO.input(self.lamp_control_pin)
-        if lamp_pin_status_binary == 0:
-            GPIO.output(self.lamp_control_pin, GPIO.HIGH)
-            return "Lamp turned on."
-        elif lamp_pin_status_binary == 1:
-            GPIO.output(self.lamp_control_pin, GPIO.LOW)
-            return "Lamp turned off."
+        pin_status_binary = GPIO.input(self.control_pin)
+        if pin_status_binary == 0:
+            GPIO.output(self.control_pin, GPIO.HIGH)
+            return "Pin turned on."
+        elif pin_status_binary == 1:
+            GPIO.output(self.control_pin, GPIO.LOW)
+            return "Pin turned off."
         else:
-            return "Lamp status unknown."
+            return "Pin status unknown."
 
     def __str__(self):
-        return f"Hardware Pin {self.lamp_control_pin}: Status {self.get_lamp_pin_status()}"
+        return f"Hardware Pin {self.control_pin}: Status {self.get_pin_status()}"

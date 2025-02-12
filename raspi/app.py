@@ -18,6 +18,14 @@ gpio_toggle_url = "/gpio/toggle"
 home_link = f"<a href='{gpio_home_url}'>Home</a>"
 
 def form_builder(url, text, pin=lamp_control_pin):
+     """
+     Form builder for the GPIO control forms.
+
+        Args:
+            url (str): The URL to submit the form to.
+            text (str): The text for the submit button.
+            pin (int): The pin number to control.
+     """
 	return f"""
 	<form action='{url}'>
 		<input type="submit" value="{text} pin {pin}, please?" />
