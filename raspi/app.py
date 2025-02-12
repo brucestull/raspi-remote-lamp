@@ -29,7 +29,7 @@ def form_builder(url, text, pin=lamp_control_pin):
     """
     return f"""
     <form action='{url}'>
-        <input type="submit" value="{text} pin {pin}, please?" />
+        <input type="submit" value="{text} lamp {pin}, please?" />
     </form>
     """
 
