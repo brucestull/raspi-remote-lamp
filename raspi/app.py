@@ -17,12 +17,22 @@ gpio_toggle_url = "/gpio/toggle"
 
 home_link = f"<a href='{gpio_home_url}'>Home</a>"
 
+
 def form_builder(url, text, pin=lamp_control_pin):
-	return f"""
-	<form action='{url}'>
-		<input type="submit" value="{text} pin {pin}, please?" />
-	</form>
-"""
+    """
+    Form builder for the GPIO control forms.
+
+    Args:
+        url (str): The URL to submit the form to.
+        text (str): The text for the submit button.
+        pin (int): The pin number to control.
+    """
+    return f"""
+    <form action='{url}'>
+        <input type="submit" value="{text} lamp {pin}, please?" />
+    </form>
+    """
+
 
 toggle_form = form_builder(gpio_toggle_url, "Toggle")
 on_form = form_builder(gpio_on_url, "Turn ON")
@@ -38,32 +48,32 @@ def home():
 
 @app.route(lamp_status_url)
 def lamp_status():
-    lamp_pin_status_str = hardware.get_lamp_pin_status()
+    lamp_pin_status_str = hardware.get_pin_status()
     data = {"lamp_pin_status": lamp_pin_status_str}
     return jsonify(data)
 
 
 @app.route(gpio_home_url)
 def gpio_home():
-    lamp_pin_status_str = hardware.get_lamp_pin_status()
+    lamp_pin_status_str = hardware.get_pin_status()
     return f"{home_link} <br> Lamp is: {lamp_pin_status_str} {form}"
 
 
 @app.route(gpio_on_url)
 def gpio_on():
-    response = hardware.turn_lamp_on()
+    response = hardware.turn_pin_on()
     return f"{home_link} <br> {response} {form}"
 
 
 @app.route(gpio_off_url)
 def gpio_off():
-    response = hardware.turn_lamp_off()
+    response = hardware.turn_pin_off()
     return f"{home_link} <br> {response} {form}"
 
 
 @app.route(gpio_toggle_url)
 def gpio_toggle():
-    status = hardware.toggle_lamp()
+    status = hardware.toggle_pin()
     print(status)
     return redirect(url_for("gpio_home"))
 
