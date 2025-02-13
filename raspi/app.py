@@ -62,13 +62,13 @@ def gpio_home():
 @app.route(gpio_on_url)
 def gpio_on():
     response = hardware.turn_pin_on()
-    return f"{home_link} <br> {response} {form}"
+    return f"{home_link} <br> Lamp {response} {form}"
 
 
 @app.route(gpio_off_url)
 def gpio_off():
     response = hardware.turn_pin_off()
-    return f"{home_link} <br> {response} {form}"
+    return f"{home_link} <br> Lamp {response} {form}"
 
 
 @app.route(gpio_toggle_url)
